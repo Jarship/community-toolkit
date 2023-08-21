@@ -1,0 +1,34 @@
+api:
+  type: backend
+  url_path: "/api"
+  prod:
+    command: ["yarn", "rw", "serve", "api"]
+  dev:
+    command: ["yarn", "rw", "dev", "api"]
+  local_packages: ["node_modules"]
+
+  system:
+    cpu: 2
+    memory: 2G
+    health_check: "/graphql/health"
+
+  resources:
+  - name: db1
+    engine: postgres
+    version: 13
+    type: database
+
+web:
+  type: frontend
+  # the 2 lines below are the defaults
+  # index_file_name: "index.html"
+  # url_path: "/"
+  assets_path: "web/dist"
+  dev:
+    command: ["yarn", "rw", "dev", "web", "--fwd=\"--allowed-hosts all\""]
+  build: ["yarn", "rw", "build", "web"]
+  local_packages: ["node_modules"]
+
+  system:
+    cpu: 2
+    memory: 2G
