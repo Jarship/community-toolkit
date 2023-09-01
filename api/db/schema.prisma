@@ -1,5 +1,5 @@
 datasource db {
-  provider = "postgres"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -15,4 +15,27 @@ model UserExample {
   id    Int     @id @default(autoincrement())
   email String  @unique
   name  String?
+}
+
+model Category {
+  id      String  @id @default(cuid())
+  name    String
+  entries   Entry[]
+  Table   Table?  @relation(fields: [tableId], references: [id])
+  tableId String?
+}
+
+model Entry {
+  id         String   @id @default(cuid())
+  category   Category @relation(fields: [categoryId], references: [id])
+  table      Table    @relation(fields: [tableId], references: [id])
+  categoryId String
+  tableId    String
+}
+
+model Table {
+  id          String     @id @default(cuid())
+  name        String
+  entries    Entry[]
+  categories Category[]
 }
